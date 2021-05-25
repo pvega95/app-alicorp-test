@@ -4,7 +4,6 @@
 
 export const environment = {
   url_API: 'https://business-bn-app-dev.herokuapp.com/',
-  // url_API : 'http://localhost:3000',
   production: false
 };
 
