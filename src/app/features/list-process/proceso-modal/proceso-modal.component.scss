@@ -1,0 +1,49 @@
+// @import '_default-theme.scss';
+.container-modal{
+    width: 307px;
+    .text-modal{
+        padding: 50px 30px;
+        p{
+            font-family: "DM Sans", sans-serif;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bolder;
+            letter-spacing: 1.22px;
+            color: #1F1933;
+        }
+    }
+    .fbx-button{
+        font-family: "DM Sans", sans-serif;
+        &.close{
+            background: #9F9FAF;
+            color: #ffffff;
+            width: 50%;
+            height: 47px;
+            border-radius: 0;
+            font-size: 16px;
+            font-weight: 100;
+            &:hover{
+                background: #55458C;
+            }
+            &.active, &:focus{
+                background: #272C3C;
+            }
+        }
+        &.accept{
+            width: 50%;
+            height: 47px;
+            border-radius: 0;
+            margin-left: 0px;
+            font-size: 16px;
+            background-color: #f44336;
+            font-weight: 100;
+            &:hover{
+                background-color: #b71c1c;
+            }
+            &.active, &:focus{
+                background-color: #b71c1c;
+            }
+        }
+        
+    }
+}
