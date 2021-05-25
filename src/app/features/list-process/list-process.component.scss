@@ -1,0 +1,19 @@
+.table-material{
+    width: 70%;
+    margin: 30px auto;
+    .filter{
+        display: block;
+    }
+    .btn-enter{
+        margin: 25px 0px;
+        text-align: right;
+        
+    }
+    table{
+        width: 100%;
+    }
+}
+
+mat-paginator{
+    margin-top: 1rem;
+}
