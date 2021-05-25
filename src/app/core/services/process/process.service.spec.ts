@@ -64,7 +64,7 @@ describe('ProcessService', () => {
     service.getProcess(5,1).subscribe((data: any) => {
       void expect(data).toEqual(MOCK_RESPONSE);
     });
-    const req = httpMock.expectOne(`${environment.url_API}/api/process/get-all${queryParams}`);
+    const req = httpMock.expectOne(`${environment.url_API}api/process/get-all${queryParams}`);
 
     expect(req.request.method).toBe("GET");
 
@@ -75,7 +75,7 @@ describe('ProcessService', () => {
     service.setDeleteById('6059409b3a990747e00f2732').subscribe((data: boolean) => {
       void expect(data).toEqual(true);
     });
-    const req = httpMock.expectOne(`${environment.url_API}/api/process/6059409b3a990747e00f2732`);
+    const req = httpMock.expectOne(`${environment.url_API}api/process/6059409b3a990747e00f2732`);
 
     expect(req.request.method).toBe("DELETE");
 

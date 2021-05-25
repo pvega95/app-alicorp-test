@@ -1,0 +1,46 @@
+/**************** RESPONSIVE *********************/
+
+/*
+*   minxs       : menor a xs
+*   maxxs       : xs a sm
+*   xs          : menor a sm
+*   xsland      : landscape 320px a mobile-landscape
+*   sm          : sm a md
+*   md          : md a lg
+*   mdland      : landscape sm a tablet-landscape
+*   lg          : mayor a lg
+*   non-retina  : no retina
+*   retina      : retina
+*   num         : menor a cualquier numero que se ponga -> @include respond-to(1600){}
+*/
+
+$xs: 576px;
+$sm: 768px;
+$md: 992px;
+$lg: 1200px;
+$mobile-landscape: 480px;
+$tablet-landscape: 1024px;
+
+/**************** /RESPONSIVE *********************/
+
+/********* Variables de fuente ***********/
+// $font-Roboto: 'DM Sans', sans-serif;
+/********* /Variables de fuente ***********/
+
+/*********  Colors ***********/
+$ngz-primary    : #FF6363;
+$gray           : #333333;
+$gray-dark      : #262626;
+$gray-light     : #666666;
+$gray-s         : #999999;
+$gray-light-s   : #F5F5F5;
+$gray-dark-s    : #EBEBEB;
+$white          : #ffffff;
+/*********  Colors ***********/
+
+/*********  Font Sizes ***********/ 
+$font-sm: 0.875rem; // 14px
+$font-med: 1.125rem; // 18px
+$font-lg: 1.25rem;
+$font-xlg: 3.25rem;
+/*********  Font Sizes ***********/

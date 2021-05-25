@@ -8,6 +8,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ProcesoModalComponent } from './proceso-modal/proceso-modal.component';
+import { IProcessResponse } from 'src/app/core/interface/process-response';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-list-process',
@@ -28,32 +30,33 @@ export class ListProcessComponent implements OnInit {
   constructor(
     private _processService: ProcessService,
     public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this.getProcess();
   }
 
-  getProcess() {
+  public getProcess() {
     this._processService.getProcess(this.postsPerPage, this.currentPage).pipe(take(1))
       .subscribe(
-        val => {
+        (val: IProcessResponse) => {
           this.dataSource = new MatTableDataSource(val.posts);
           this.totalPosts = val.maxPosts;
         },
         (err: HttpErrorResponse) => {
-
+          //LOGICA EN CASO HUBIERA UN ERROR
         }
       )
   }
 
-  onChangedPage(pageData: PageEvent) {
+  public onChangedPage(pageData: PageEvent) {
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
     this.getProcess();
   }
 
-  delete(id: string) {
+  public delete(id: string) {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
@@ -64,7 +67,6 @@ export class ListProcessComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (data: boolean) => {
         if (data) {
-
           this.deleteProcess(id);
         }
 
@@ -72,14 +74,15 @@ export class ListProcessComponent implements OnInit {
     );
   }
 
-  deleteProcess(id: string) {
+  public deleteProcess(id: string) {
     this._processService.setDeleteById(id).pipe(take(1))
       .subscribe((res: any) => {
         if (res) {
           this.getProcess();
+          this._snackBar.open('Se elimino corretamente', 'Aceptar');
         }
       }, (err: HttpErrorResponse) => {
-
+        //LOGICA EN CASO HUBIERA UN ERROR
       });
   }
 
