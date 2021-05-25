@@ -137,4 +137,24 @@ describe('ListProcessComponent', () => {
     expect(component.getProcess).toHaveBeenCalled();
   });
 
+  it('Deberia llamar al servicio de eliminar registro y obtiene un valor indefinido ', ()=> {
+    spyOn(service,'setDeleteById').and.returnValue(of(null));
+    spyOn(component,'getProcess');
+    component.deleteProcess('6059409b3a990747e00f2732');
+    expect(component.getProcess).not.toHaveBeenCalled();
+  });
+
+  it('Deberia llamar al servicio de eliminar registro - error ', ()=> {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: {
+        code: 'T09999'
+      }
+    });
+    spyOn(component,'getProcess');
+    spyOn(service,'setDeleteById').and.returnValue(throwError(errorResponse));
+    component.deleteProcess('6059409b3a990747e00f2732');
+    expect(component.getProcess).not.toHaveBeenCalled();
+  });
+
 });
