@@ -1,15 +1,16 @@
-// @import '_default-theme.scss';
+@import "_default-theme.scss";
+
 .container-modal{
     width: 307px;
     .text-modal{
         padding: 50px 30px;
-        p{
+        p {
             font-family: "DM Sans", sans-serif;
             text-align: center;
             font-size: 16px;
             font-weight: bolder;
             letter-spacing: 1.22px;
-            color: #1F1933;
+            color: $gray;
         }
     }
     .fbx-button{
@@ -23,10 +24,10 @@
             font-size: 16px;
             font-weight: 100;
             &:hover{
-                background: #55458C;
+                background: $gray-light ;
             }
             &.active, &:focus{
-                background: #272C3C;
+                background: $gray;
             }
         }
         &.accept{
@@ -38,7 +39,7 @@
             background-color: #f44336;
             font-weight: 100;
             &:hover{
-                background-color: #b71c1c;
+                background-color: $ngz-primary;
             }
             &.active, &:focus{
                 background-color: #b71c1c;

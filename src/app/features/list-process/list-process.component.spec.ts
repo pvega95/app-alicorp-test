@@ -6,11 +6,15 @@ import { ProcessService } from 'src/app/core/services/process/process.service';
 import { ListProcessComponent } from './list-process.component';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Overlay } from '@angular/cdk/overlay';
 
 export class MatDialogMock {
   open() {
     return {
-      afterClosed: () => of({action: true})
+      afterClosed: () => of({ action: true })
     };
   }
 }
@@ -47,29 +51,36 @@ const MOCK_RESPONSE = {
   "maxPosts": 7
 }
 
+const mockMatSnackBar = {
+  open: () => {}
+};
+
 describe('ListProcessComponent', () => {
   let component: ListProcessComponent;
   let fixture: ComponentFixture<ListProcessComponent>;
   let service: ProcessService;
-  // let dialog : MatDialog;
+  let matSnackBar: MatSnackBar;
   beforeEach(async () => {
+
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [ ListProcessComponent ],
+      imports: [HttpClientTestingModule, MatTableModule],
+      declarations: [ListProcessComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialog, useClass: MatDialogMock },
-        ProcessService
+        { provide: MatSnackBar, useValue: mockMatSnackBar },
+          ProcessService, 
       ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ListProcessComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ProcessService);
-    // dialog = TestBed.inject(MatDialog);
+    matSnackBar = TestBed.inject(MatSnackBar);
     fixture.detectChanges();
   });
 
@@ -77,14 +88,14 @@ describe('ListProcessComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Deberia llamar al metodo getProcess', ()=> {
-    spyOn(component,'getProcess');
+  it('Deberia llamar al metodo getProcess', () => {
+    spyOn(component, 'getProcess');
     component.ngOnInit();
     expect(component.getProcess).toHaveBeenCalled();
   });
 
-  it('Deberia llamar al metodo getProcess por cada evento de paginacion', ()=> {
-    spyOn(component,'getProcess');
+  it('Deberia llamar al metodo getProcess por cada evento de paginacion', () => {
+    spyOn(component, 'getProcess');
     const pageData: PageEvent = {
       pageIndex: 0,
       length: 0,
@@ -94,65 +105,66 @@ describe('ListProcessComponent', () => {
     expect(component.getProcess).toHaveBeenCalled();
   });
 
-  it('Deberia llamar al listado de procesos', ()=> {
-    spyOn(service,'getProcess').and.returnValue(of(MOCK_RESPONSE));
+  it('Deberia llamar al listado de procesos', () => {
+    spyOn(service, 'getProcess').and.returnValue(of(MOCK_RESPONSE));
     component.getProcess();
     expect(component.totalPosts).toEqual(7);
   });
 
-  it('Deberia llamar al listado de procesos - error ', ()=> {
+  it('Deberia llamar al listado de procesos - error ', () => {
     const errorResponse = new HttpErrorResponse({
       status: 500,
       error: {
         code: 'T09999'
       }
     });
-    spyOn(service,'getProcess').and.returnValue(throwError(errorResponse));
+    spyOn(service, 'getProcess').and.returnValue(throwError(errorResponse));
     component.getProcess();
     expect(component.totalPosts).toEqual(10);
   });
 
-  it('Deberia llamar al modal querer eliminar un registro', ()=> {
-    spyOn(component,'deleteProcess');
+  it('Deberia llamar al modal querer eliminar un registro', () => {
+    spyOn(component, 'deleteProcess');
     spyOn(component.dialog, 'open')
-     .and
-     .returnValue({afterClosed: () => of(true)} as MatDialogRef<typeof component>);
+      .and
+      .returnValue({ afterClosed: () => of(true) } as MatDialogRef<typeof component>);
     component.delete('6059409b3a990747e00f2732');
     expect(component.deleteProcess).toHaveBeenCalled();
   });
 
-  it('Deberia llamar al modal querer eliminar un registro - false', ()=> {
-    spyOn(component,'deleteProcess');
+  it('Deberia llamar al modal querer eliminar un registro - false', () => {
+    spyOn(component, 'deleteProcess');
     spyOn(component.dialog, 'open')
-     .and
-     .returnValue({afterClosed: () => of(false)} as MatDialogRef<typeof component>);
+      .and
+      .returnValue({ afterClosed: () => of(false) } as MatDialogRef<typeof component>);
     component.delete('6059409b3a990747e00f2732');
     expect(component.deleteProcess).not.toHaveBeenCalled();
   });
 
-  it('Deberia llamar al servicio de eliminar registro ', ()=> {
-    spyOn(service,'setDeleteById').and.returnValue(of(true));
-    spyOn(component,'getProcess');
+  it('Deberia llamar al servicio de eliminar registro ', () => {
+    spyOn(service, 'setDeleteById').and.returnValue(of(true));
+    spyOn(matSnackBar, 'open').and.stub();
+    spyOn(component, 'getProcess');
     component.deleteProcess('6059409b3a990747e00f2732');
     expect(component.getProcess).toHaveBeenCalled();
   });
 
-  it('Deberia llamar al servicio de eliminar registro y obtiene un valor indefinido ', ()=> {
-    spyOn(service,'setDeleteById').and.returnValue(of(null));
-    spyOn(component,'getProcess');
+  it('Deberia llamar al servicio de eliminar registro y obtiene un valor indefinido ', () => {
+    spyOn(service, 'setDeleteById').and.returnValue(of(null));
+    spyOn(component, 'getProcess');
     component.deleteProcess('6059409b3a990747e00f2732');
     expect(component.getProcess).not.toHaveBeenCalled();
   });
 
-  it('Deberia llamar al servicio de eliminar registro - error ', ()=> {
+  it('Deberia llamar al servicio de eliminar registro - error ', () => {
     const errorResponse = new HttpErrorResponse({
       status: 500,
       error: {
         code: 'T09999'
       }
     });
-    spyOn(component,'getProcess');
-    spyOn(service,'setDeleteById').and.returnValue(throwError(errorResponse));
+    spyOn(component, 'getProcess');
+    spyOn(service, 'setDeleteById').and.returnValue(throwError(errorResponse));
     component.deleteProcess('6059409b3a990747e00f2732');
     expect(component.getProcess).not.toHaveBeenCalled();
   });
